@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "start": "firebase emulators:start",
     "stop": "npx kill-port 9000,9199,5000"
   },
   "dependencies": {
