@@ -7,3 +7,14 @@ main {
     width: 80%;
     background-color: rgba(255, 255, 255, 0.774);
 }
+
+nav {
+    height: 50px;
+    background-image: url("99987.webp");
+    background-size: 100% 50px;
+    color: white;
+}
+
+nav a {
+    color:white;
+}
