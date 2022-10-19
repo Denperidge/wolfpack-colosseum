@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         ].filter(feature => typeof app[feature] === 'function');
 
         database = firebase.database();
-        storage = firebase.storage();
+        storage = firebase.storage().ref();
 
         let params = new URLSearchParams(document.location.search);
         console.log(params)
@@ -42,10 +42,28 @@ document.addEventListener('DOMContentLoaded', function () {
         foodName = params.get("id");
 
         //food = database.ref(`food/${params.id}`);
-        let food = database.ref(`food/${foodName}`);
-        food.get().then((data)=> {
-            console.log(data);
-        })
+        let foodDb = database.ref(`food/${foodName}`).get();
+        
+        let foodImg;
+        let foodImgPromise = storage.child(`food/${foodName}.jpeg`).getDownloadURL();
+        Promise.all([foodImgPromise, foodDb])
+            .then(data => {
+                console.log("got url")
+            
+                console.log("got db")
+
+                console.log(data);
+                document.getElementById("info").innerHTML = `
+                    <h1>${foodName}</h1>
+                    <img src="${data[0]}"/>
+                    
+                `;
+                let description = data[1].description;
+                if (description) {
+                    document.getElementById("info").innerHTML += `<p>${description}</p>`;
+                }
+            })
+
         comments = database.ref("comments").orderByChild("food").equalTo(foodName)
         console.log(comments)
 
@@ -55,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
         comments.on("child_changed", RefreshComments)
         comments.on("child_removed", RefreshComments);
 
+ 
     } catch (e) {
         console.error(e);
     }
