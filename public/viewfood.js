@@ -1,6 +1,7 @@
 
 let database; let comments; let foodName;
 let storage;
+let form;
 
 document.addEventListener('DOMContentLoaded', function () {
     const loadEl = document.querySelector('#load');
@@ -73,6 +74,9 @@ document.addEventListener('DOMContentLoaded', function () {
         comments.on("child_changed", RefreshComments)
         comments.on("child_removed", RefreshComments);
 
+        form = document.getElementById("form");
+        form.addEventListener("submit", NewComment);
+
  
     } catch (e) {
         console.error(e);
@@ -86,11 +90,11 @@ function RefreshComments(data) {
         snapshot.forEach((item) => {
             let value = item.val();
             commentsHTML += `
-            <article>
-                <h2>${value.userId}</h2>
-                <p>${value.positive}</p>
+            <fieldset>
+                <legend>${value.userId} awoos...</legend>
+                <p>I love it: ${value.positive}</p>
                 <p>${value.comment}</p>
-            </article>
+            </fieldset>
             `;
         });
         document.getElementById("comments").innerHTML = commentsHTML;
@@ -103,11 +107,16 @@ function RefreshComments(data) {
 
 }
 
-function NewComment(positive, comment) {
+function NewComment(e) {
+    e.preventDefault();
 
-    let newComment = comments.push();
+    let username = form.name.value;
+    let comment = form.comment.value;
+    let positive = form.positive.checked;
+
+    let newComment = database.ref("comments").push();
     newComment.set({
-        userId: "meow",
+        userId: username,
         positive: positive,
         comment: comment,
         food: foodName
