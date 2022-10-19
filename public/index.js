@@ -1,5 +1,6 @@
 
-let database; let comments;
+let database; let foods;
+let storage;
 
 document.addEventListener('DOMContentLoaded', function () {
     const loadEl = document.querySelector('#load');
@@ -33,50 +34,50 @@ document.addEventListener('DOMContentLoaded', function () {
         ].filter(feature => typeof app[feature] === 'function');
 
         database = firebase.database();
-        comments = database.ref("comments");
+        storage = firebase.storage().ref();
+        foods = database.ref("food");
 
-        RefreshComments();
-        comments.on("child_added", RefreshComments).on("child_changed", RefreshComments).on("child_removed", RefreshComments);
+        //RefreshFoods();
+        foods.on("child_added", RefreshFoods);
+        foods.on("child_changed", RefreshFoods);
+        foods.on("child_removed", RefreshFoods);
 
     } catch (e) {
         console.error(e);
+    } finally {
+        RefreshFoods();
     }
 });
 
 // Crude comment refresh
-function RefreshComments(data) {
-    let commentsHTML = "";
-    comments.once("value", (snapshot) => {
+function RefreshFoods() {
+    console.log("refresh")
+    document.getElementById("foods").innerHTML = "";
+    foods.once("value", (snapshot) => {
 
-        snapshot.forEach((item) => {
+        snapshot.forEach(item => {
+            console.log("snap")
             let value = item.val();
-            commentsHTML += `
-            <article>
-                <h2>${value.userId}</h2>
-                <p>${value.positive}</p>
-                <p>${value.comment}</p>
-            </article>
-            `;
-        });
-        document.getElementById("comments").innerHTML = commentsHTML;
+            let foodName = value.name;
 
-    }).then(() => {
-        
+            console.log(value)
+
+            storage.child(`food/${foodName}.jpeg`).getDownloadURL().then((downloadUrl) => {
+                document.getElementById("foods").innerHTML += `
+                <a href="/viewfood.html?id=${foodName}">
+                    <img src="${downloadUrl}"/>
+                    <p>${foodName}</p>
+                </a>
+                `;
+            });
+
+            
+        });
+
     });
 
     
 
 }
 
-function NewComment(positive, comment) {
-
-    let newComment = comments.push();
-    newComment.set({
-        userId: "meow",
-        positive: positive,
-        comment: comment
-    });
-
-}
-
-window.NewComment = NewComment;
+window.RefreshFoods = RefreshFoods;
