@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "stop": "npx kill-port 9000,4000,5000"
+    "stop": "npx kill-port 9000,9199,5000"
   },
   "dependencies": {
     "firebase": "^9.12.1"
