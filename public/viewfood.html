@@ -22,22 +22,25 @@
       to avoid connecting the SDK to running emulators.
     -->
     <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+    <link rel="stylesheet" href="stylesheet.css">
 
   </head>
   <body>
-    <section id="info"></section>
-    <section id="comments"></section>
-
-    <form id="form">
-      <label>Name</label>
-      <input type="text" name="name">
-      <label>Comment</label>
-      <textarea name="comment"></textarea>
-      
-      <label>Do you approve of this<input type="checkbox" name="positive"></label>
-      <button type="submit">AWOO iNTO THE NIGHT</button>
-    </form>
-
-    <script src="viewfood.js" type="module"></script>
+    <main>
+      <section id="info"></section>
+      <section id="comments"></section>
+  
+      <form id="form">
+        <label>Name</label>
+        <input type="text" name="name">
+        <label>Comment</label>
+        <textarea name="comment"></textarea>
+        
+        <label>Do you approve of this<input type="checkbox" name="positive"></label>
+        <button type="submit">AWOO iNTO THE NIGHT</button>
+      </form>
+  
+      <script src="viewfood.js" type="module"></script>
+    </main>
   </body>
 </html>
