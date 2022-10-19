@@ -46,11 +46,14 @@ document.addEventListener('DOMContentLoaded', function () {
         food.get().then((data)=> {
             console.log(data);
         })
-        comments = database.ref("comments");
+        comments = database.ref("comments").orderByChild("food").equalTo(foodName)
+        console.log(comments)
 
         RefreshComments();
         //comments.on("value", RefreshComments);
-        comments.on("child_added", RefreshComments).on("child_changed", RefreshComments).on("child_removed", RefreshComments);
+        comments.on("child_added", RefreshComments);
+        comments.on("child_changed", RefreshComments)
+        comments.on("child_removed", RefreshComments);
 
     } catch (e) {
         console.error(e);
@@ -60,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Crude comment refresh
 function RefreshComments(data) {
     let commentsHTML = "";
-    comments.equalTo("food", foodName).once("value", (snapshot) => {
+    comments.once("value", (snapshot) => {
         snapshot.forEach((item) => {
             let value = item.val();
             commentsHTML += `
