@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
             'performance',
         ].filter(feature => typeof app[feature] === 'function');
 
+        database = firebase.database();
         storage = firebase.storage().ref();
         form = document.getElementById("form");
 
@@ -49,8 +50,16 @@ form.addEventListener("submit", function(e) {
 
     let newFile = storage.child(`food/${name}.jpeg`);
     console.log(newFile)
-    newFile.put(form.file.files[0]).then((snapshot) => {
-        window.location.href = "/index.html?id=" + name;
+    newFile.put(form.file.files[0]);
+
+    let newFood = database.ref(`food/${name}`).set({
+        name: name,
+        description: description
+    });
+
+
+    Promise.all([newFile, newFood]).then((snapshot) => {
+        window.location.href = "/viewfood.html?id=" + name;
     })
 
     
