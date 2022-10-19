@@ -1,0 +1,9 @@
+body {
+    background-image: url("howlingwolfmidnightmoon.jpg");
+    background-size: 400px auto;
+}
+main {
+    margin: auto;
+    width: 80%;
+    background-color: rgba(255, 255, 255, 0.774);
+}
