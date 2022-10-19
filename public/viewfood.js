@@ -37,17 +37,20 @@ document.addEventListener('DOMContentLoaded', function () {
         storage = firebase.storage();
 
         let params = new URLSearchParams(document.location.search);
+        console.log(params)
+
+        foodName = params.get("id");
 
         //food = database.ref(`food/${params.id}`);
-        let food = database.ref(`food/${params.id}`);
+        let food = database.ref(`food/${foodName}`);
         food.get().then((data)=> {
             console.log(data);
         })
-        comments = database.ref(`comments`);
+        comments = database.ref("comments");
 
         RefreshComments();
         //comments.on("value", RefreshComments);
-        //comments.on("child_added", RefreshComments).on("child_changed", RefreshComments).on("child_removed", RefreshComments);
+        comments.on("child_added", RefreshComments).on("child_changed", RefreshComments).on("child_removed", RefreshComments);
 
     } catch (e) {
         console.error(e);
@@ -58,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function () {
 function RefreshComments(data) {
     let commentsHTML = "";
     comments.equalTo("food", foodName).once("value", (snapshot) => {
-        snapshot.filter((x) => x.val().food = )
-
         snapshot.forEach((item) => {
             let value = item.val();
             commentsHTML += `
