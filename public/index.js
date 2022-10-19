@@ -41,43 +41,40 @@ document.addEventListener('DOMContentLoaded', function () {
         foods.on("child_added", RefreshFoods);
         foods.on("child_changed", RefreshFoods);
         foods.on("child_removed", RefreshFoods);
+        window.foodsFile = foods;
 
     } catch (e) {
         console.error(e);
     } finally {
-        RefreshFoods();
+        //RefreshFoods();
     }
 });
 
 // Crude comment refresh
 function RefreshFoods() {
     console.log("refresh")
-    document.getElementById("foods").innerHTML = "";
-    foods.once("value", (snapshot) => {
+    
+    foods.get().then(async (snapshot) => {
+        let foodDictionary = snapshot.val()
+        let foodIds = Object.keys(foodDictionary);
+        let foodHTML = "";
 
-        snapshot.forEach(item => {
-            console.log("snap")
-            let value = item.val();
-            let foodName = value.name;
+        for (var i = 0; i < foodIds.length; i++) {
+            let foodName = foodDictionary[foodIds[i]].name;
 
-            console.log(value)
 
-            storage.child(`food/${foodName}.jpeg`).getDownloadURL().then((downloadUrl) => {
-                document.getElementById("foods").innerHTML += `
+
+            let downloadUrl = await storage.child(`food/${foodName}.jpeg`).getDownloadURL();
+            
+            foodHTML += `
                 <a href="/viewfood?id=${foodName}">
                     <img src="${downloadUrl}"/>
                     <p>${foodName}</p>
                 </a>
                 `;
-            });
-
-            
-        });
-
+        }
+        document.getElementById("foods").innerHTML = foodHTML;
     });
-
-    
-
 }
 
 window.RefreshFoods = RefreshFoods;
