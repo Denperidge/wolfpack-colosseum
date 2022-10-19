@@ -64,7 +64,7 @@ function RefreshFoods() {
 
             storage.child(`food/${foodName}.jpeg`).getDownloadURL().then((downloadUrl) => {
                 document.getElementById("foods").innerHTML += `
-                <a href="/viewfood.html?id=${foodName}">
+                <a href="/viewfood?id=${foodName}">
                     <img src="${downloadUrl}"/>
                     <p>${foodName}</p>
                 </a>

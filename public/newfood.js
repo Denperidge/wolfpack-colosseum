@@ -59,7 +59,7 @@ form.addEventListener("submit", function(e) {
 
 
     Promise.all([newFile, newFood]).then((snapshot) => {
-        window.location.href = "/viewfood.html?id=" + name;
+        window.location.href = "/viewfood?id=" + name;
     })
 
     
